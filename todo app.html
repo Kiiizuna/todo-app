@@ -13,6 +13,7 @@
 		.finish {
 			text-decoration: line-through;
 			color: gray;
+            background-color: lightblue;
 		}
 
 	</style>
@@ -38,34 +39,36 @@
 		}
 
 		var todoList = [] //添加时收集todo, 删除时splice掉todo
-        var cellClass = []
-
-
         var btn = document.querySelector('#id-btn')
+
         btn.addEventListener('click',function(){
-        	
-			var input = document.querySelector('#id-input')
-			var task = input.value
-			inputValue = {
-				'task': task,
-				'time': currentTime(),
-			} 
-             todoList.push(inputValue)
+    		var input = document.querySelector('#id-input')
+    		var task = input.value
+    		inputValue = {
+    			'task': task,
+    			'time': currentTime(),
+                'status': false,
+    		} 
+            todoList.push(inputValue)
             //用一个对象保存用户输入的内容以及相应的状态
-            //用函数来包裹加载的动作
-            addTodo(inputValue)
-			saveTodoList() // 第一处 添加后保存
+            addTodo(inputValue, false)
+    		saveTodoList() // 第一处 添加后保存
         })
+
 		//在页面中添加内容(需要再理解下这个函数)
-        var addTodo = function(inputValue) {
+        var addTodo = function(inputValue, done) {
             var main = document.querySelector('#id-main')
-            var t = templateTodo(inputValue)
+            var t = templateTodo(inputValue, done)
             main.insertAdjacentHTML('beforeend', t)
         }
 
-        var templateTodo = function(todo){
+        var templateTodo = function(todo, done){
+            var status = ''
+            if (done) {
+                status = 'finish'
+            }
         	var t = `
-	        	<div id="id-todo-list" class='list-cell'>
+	        	<div id="id-todo-list" class='list-cell ${status}'>
 					<button class='done'>完成</button>
 					<button class='del'>删除</button> 
 					<span contenteditable='true' class= 'span1'>${todo.task}</span>
@@ -77,7 +80,7 @@
 
         var main = document.querySelector('#id-main')
           // 修改task失去焦点更新以及保存状态
-          main.addEventListener('keydown', function(event){
+        main.addEventListener('keydown', function(event){
             log("main的keydown事件是", event)
             var target = event.target
             log('target是', target) //target 是span
@@ -97,25 +100,25 @@
 
           //自己尝试!!----在鼠标点击任何地点失去焦点并同样保存
           //这里要注意blur不冒泡而focusout可以
-                main.addEventListener('focusout', function(event){
-                log("触发的事件是", event)
-                var target = event.target
-                log('target是', target) //target 是??
-                // var d = document.activeElement.tagName
-                // log("有焦点的是", )
-                if (target.classList.contains("done")) {
-                    log("失去焦点的事件是button触发的!!!")
-                }else{
-                    var index = indexOfElement(target.parentElement)
-                    log("index for revisesd span is ", index)
-                    todoList[index].task = target.innerHTML 
-                //开始写的是todoList[index].inputValue.task
-                    log("点了其他地方了(失去焦点了)")
-                    saveTodoList()  //第??处 修改后保存
-                }     
+        main.addEventListener('focusout', function(event){
+            log("触发的事件是", event)
+            var target = event.target
+            log('target是', target) //target 是??
+            // var d = document.activeElement.tagName
+            // log("有焦点的是", )
+            if (target.classList.contains("done")) {
+                log("失去焦点的事件是button触发的!!!")
+            }else{
+                var index = indexOfElement(target.parentElement)
+                log("index for revisesd span is ", index)
+                todoList[index].task = target.innerHTML 
+            //开始写的是todoList[index].inputValue.task
+                log("点了其他地方了(失去焦点了)")
+                saveTodoList()  //第??处 修改后保存
+            }     
         })  
 
-                // 对于done 以及del button的点击事件
+            // 对于done 以及del button的点击事件
         main.addEventListener('click', function(event){
         	log("main click", event)
         	var target = event.target
@@ -127,8 +130,15 @@
         		log('span', target.parentElement)
                 var cls = todoDiv.classList
                 log("当前拥有的属性为", cls)
-                cellClass = cls
-                saveCss()
+
+                if (cls.contains('finish')) {
+                    var index = indexOfElement(target.parentElement)
+                    todoList[index].status = true
+                }else{
+                    var index = indexOfElement(target.parentElement)
+                    todoList[index].status = false
+                }
+                saveTodoList()
 
         	}else if(target.classList.contains('del')){
         		var todoDiv = target.parentElement
@@ -140,7 +150,7 @@
         	}
         })	
 
-        // 保存 todoList
+        // 保存 todoList, 定义一个函数 用于把数组写入localStorage
         var saveTodoList = function() {
             var s = JSON.stringify(todoList)
             localStorage.todolists = s
@@ -152,21 +162,20 @@
             return JSON.parse(s)
         }
 
-        // 保存点击完成按钮后的css状态
-        var saveCss = function() {
-           var s = JSON.stringify(cellClass)
-           localStorage.cellClass = s
-        }
-
-        //加载 css
-        var loadCss = function() {
-            var s = localStorage.cellClass
-            return JSON.parse(s)
-        }
+        // // 保存点击完成按钮后的css状态
+        // var saveCss = function() {
+        //    var s = JSON.stringify(cellClass)
+        //    localStorage.cellClass = s
+        // }
+        // //加载 css
+        // var loadCss = function() {
+        //     var s = localStorage.cellClass
+        //     return JSON.parse(s)
+        // }
 
 
          // 返回自己在父元素中的下标,方便后续在todoList中把数据删除
-         var indexOfElement = function(element) {
+        var indexOfElement = function(element) {
          	var parent = element.parentElement
          	for (var i = 0; i < parent.children.length; i++) {
          		var e = parent.children[i]
@@ -192,52 +201,52 @@
         	var hour = d.getHours()
         	var minute = d.getMinutes()
         	var second = d.getSeconds()
-        	var timeSting = `${month}/${date} ${hour}:${minute}:${second}`
+        	var timeSting = `${month}/${date} ${hour}:${fixTime(minute)}:${fixTime(second)}`
         	return timeSting
         }
-       
+
+        var fixTime = function(t) {
+            if (t < 10) {
+                t = '0' + t
+            }
+            return t
+        }
    
 
-//程序加载后, 加载todoList 并添加到页面中
-todoList = loadTodoList() //获得保存下的todoList
-for (var i = 0; i < todoList.length; i++) {
-    var inputValue = todoList[i] // 把每个todo取出来加载到页面中
-    addTodo(inputValue)
-}
-//加载新的css给到div
-
-cellClass = loadCss()
-log("cellClass is ", cellClass)
-for (var i = 0; i < todoList.length; i++) {
-    var inputValue = todoList[i]
-    log("inputValue是对象,分别是", inputValue)
-    log( inputValue.parentElement)
-    
-    // inputValue.parentElement.classList.add(cellClass.0, cellClass.1)   
-    
-}
+        //程序加载后, 获得todoList 并添加到页面中
+        var loadAll = function() {
+            todoList = loadTodoList()  
+            // 获得保存下来的todoList
+            for (var i = 0; i < todoList.length; i++) {
+                var inputValue = todoList[i]
+                // 把每个todo取出来加载到页面中
+                addTodo(inputValue, inputValue.status)
+            }
+        }
+        loadAll()
+        
 
 
-             // 时间标准库
-// ===
-// 常用用法如下
-// var d = new Date()
-// d.getFullYear()
-// 年份, 2016
-// d.getMonth()
-// 月份, 0-11
-// d.getDate()
-// 日期, 1-31
-// d.getHours()
-// 小时, 0-23
-// d.getMinutes()
-// 分钟, 0-59
-// d.getSeconds()
-// 秒数, 0-59
-// d.getMilliseconds()
-// 毫秒, 0-999
-// d.getDay()
-// 星期几, 0-6
+            // 时间标准库
+            // ===
+            // 常用用法如下
+            // var d = new Date()
+            // d.getFullYear()
+            // 年份, 2016
+            // d.getMonth()
+            // 月份, 0-11
+            // d.getDate()
+            // 日期, 1-31
+            // d.getHours()
+            // 小时, 0-23
+            // d.getMinutes()
+            // 分钟, 0-59
+            // d.getSeconds()
+            // 秒数, 0-59
+            // d.getMilliseconds()
+            // 毫秒, 0-999
+            // d.getDay()
+            // 星期几, 0-6
 	</script>
 </body>
 </html>
