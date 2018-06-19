@@ -5,27 +5,88 @@
 	<title>todo app s2</title>
 	<style>
 		#id-todo-main {
-			width: 300px;
+			width: 600px;
 			/*border: 1px red solid;*/
 			margin: 0 auto;
-
+            position: relative;
 		}
 		.finish {
 			text-decoration: line-through;
 			color: gray;
-            background-color: lightblue;
+            transition: color 0.4s;
+            /*background-color: lightblue;*/
 		}
         #id-main .span2 {
             float: right;
         }
+        .header {
+            position: relative;
+            display: block;
+            /*height: 500px;*/
+        }
+        .header h1 {
+            position: static;
+            top: -155px;
+            width: 100%;
+            width: 100%;
+            font-size: 52px;
+            font-weight: 500;
+            text-align: center;
+            color: rgba(77, 175, 47, 0.55);
+        }
+        .header #id-input {
+            padding: 16px 16px 16px 60px;
+            border: none;
+            background: rgba(0, 0, 0, 0.003);
+            box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+        }
+        #id-main span {
+            white-space: pre-line;
+            word-break: break-all;
+            /*padding: 15px 60px 15px 15px;*/
+            margin-left: 15px;
+            /*display: block;*/
+            line-height: 1.2;
+            transition: color 0.4s;
+        }
+        #id-todo-list {
+            padding: 6px 60px 6px 6px;
+            border-bottom: 1px gray solid;
+        }
+         #id-todo-list .done{
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50; /* Green */
+            border-radius: 10%
+        }
+          #id-todo-list .del{
+            background-color: white;
+            color: black;
+            border: 2px solid #f44336; /* Green */
+            border-radius: 10%
+        }
+        #id-todo-list .done:hover {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        #id-todo-list .del:hover {
+            background-color: #f44336;
+            color: white;
+            cursor: pointer;
+        }
 	</style>
 </head>
 <body>
-	<div id="id-todo-main">
-		<div id="id-todo-form">
-			<input id="id-input" type="text" placeholder='做些什么吧!'>
-			<button id="id-btn">Add</button>
-		</div>
+	<section id="id-todo-main">
+        <header class="header">
+            <h1>My Todos</h1>
+            <div id="id-todo-form">
+            <input id="id-input" type="text" placeholder='做些什么吧!'>
+            <button id="id-btn">Add</button>
+            </div>
+        </header>
+       
 		<div id="id-main">
 			<!-- <div id="id-todo-list">
 				<button>完成</button>
@@ -33,7 +94,7 @@
 				<span>吃饭</span>
 			</div> -->
 		</div>
-	</div>
+	</section>
 
 	<script>
 		var log = function() {
@@ -72,7 +133,7 @@
         	var t = `
 	        	<div id="id-todo-list" class='list-cell ${status}'>
 					<button class='done'>完成</button>
-					<button class='del'>删除</button> 
+					<button class='del'>×</button> 
 					<span contenteditable='true' class= 'span1'>${todo.task}</span>
 					<span class= 'span2'>${todo.time}</span>
 				</div>
