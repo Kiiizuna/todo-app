@@ -5,14 +5,17 @@
 	<title>todo app s2</title>
 	<style>
 		#id-todo-main {
-			width: 600px;
-			/*border: 1px red solid;*/
+            font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			max-width: 600px;
+            min-width: 230px;
+			border: 1px #d9d9d9 solid;
 			margin: 0 auto;
             position: relative;
+            font-weight: 300;
 		}
 		.finish {
 			text-decoration: line-through;
-			color: gray;
+			color: #d9d9d9;
             transition: color 0.4s;
             /*background-color: lightblue;*/
 		}
@@ -35,8 +38,9 @@
             color: rgba(77, 175, 47, 0.55);
         }
         .header #id-input {
-            padding: 16px 16px 16px 60px;
-            border: none;
+            font-size: 20px;
+            padding: 12px 140px 12px 60px;
+            border: 1px #d9d9d9 solid;
             background: rgba(0, 0, 0, 0.003);
             box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
         }
@@ -51,7 +55,7 @@
         }
         #id-todo-list {
             padding: 6px 60px 6px 6px;
-            border-bottom: 1px gray solid;
+            border-bottom: 1px #d9d9d9 solid;
         }
          #id-todo-list .done{
             background-color: white;
@@ -62,7 +66,7 @@
           #id-todo-list .del{
             background-color: white;
             color: black;
-            border: 2px solid #f44336; /* Green */
+            border: 2px solid #f44336; /* red */
             border-radius: 10%
         }
         #id-todo-list .done:hover {
@@ -75,6 +79,41 @@
             color: white;
             cursor: pointer;
         }
+        #id-btn {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50; /* Green */
+            border-radius: 10%
+            height:40px;
+            width: 70px;
+            position: absolute;
+            top: 124px;
+            right: 61px;
+        }
+        #id-btn:hover {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        #footer {
+            /*width: 600px;*/
+            height: 20px;
+        }
+        #footer:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 600px;
+            bottom: 130px;
+            left: 94px;
+            height: 50px;
+            overflow: hidden;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+                        0 8px 0 -3px #f6f6f6,
+                        0 9px 1px -3px rgba(0, 0, 0, 0.2),
+                        0 16px 0 -6px #f6f6f6,
+                        0 17px 2px -6px rgba(0, 0, 0, 0.2);
+        }
 	</style>
 </head>
 <body>
@@ -82,8 +121,8 @@
         <header class="header">
             <h1>My Todos</h1>
             <div id="id-todo-form">
-            <input id="id-input" type="text" placeholder='做些什么吧!'>
-            <button id="id-btn">Add</button>
+            <input id="id-input" type="text" placeholder='赶紧做些什么吧!'>
+            <button id="id-btn">添加</button>
             </div>
         </header>
        
@@ -95,6 +134,7 @@
 			</div> -->
 		</div>
 	</section>
+    <footer id="footer"></footer>
 
 	<script>
 		var log = function() {
@@ -103,7 +143,6 @@
 
 		var todoList = [] //添加时收集todo, 删除时splice掉todo
         var btn = document.querySelector('#id-btn')
-
         btn.addEventListener('click',function(){
     		var input = document.querySelector('#id-input')
     		var task = input.value
@@ -116,6 +155,26 @@
             //用一个对象保存用户输入的内容以及相应的状态
             addTodo(inputValue, false)
     		saveTodoList() // 第一处 添加后保存
+            input.value = ''
+        })
+
+        // 输入状态下按回车 添加新todo /me
+            var inputSec = document.querySelector("#id-input")
+            inputSec.addEventListener('keydown',function(event){
+            if (event.key === "Enter") {
+                var input = document.querySelector('#id-input')
+                var task = input.value
+                inputValue = {
+                    'task': task,
+                    'time': currentTime(),
+                    'status': false,
+                } 
+                todoList.push(inputValue)
+                //用一个对象保存用户输入的内容以及相应的状态
+                addTodo(inputValue, false)
+                saveTodoList() // 第一处 添加后保存
+                input.value = ''
+                }
         })
 
 		//在页面中添加内容(需要再理解下这个函数)
@@ -257,14 +316,15 @@
         }
 
         var currentTime = function() {
+            var m = 'AM'
         	var d = new Date()
         	var month = d.getMonth() + 1
         	var date = d.getDate()
         	var hour = d.getHours()
         	var minute = d.getMinutes()
         	var second = d.getSeconds()
-        	var timeSting = `${month}/${date} ${hour}:${fixTime(minute)}:${fixTime(second)}`
-        	return timeSting
+        	var timeString = `${month}/${date} ${hour}:${fixTime(minute)}:${fixTime(second)} ${fixAmPm(m)}`
+        	return timeString
         }
 
         var fixTime = function(t) {
@@ -272,6 +332,15 @@
                 t = '0' + t
             }
             return t
+        }
+
+        var fixAmPm = function(m) {
+            var d = new Date()
+            var hour = d.getHours()
+            if (hour > 12) {
+                m = 'PM'
+            }
+            return m
         }
    
 
