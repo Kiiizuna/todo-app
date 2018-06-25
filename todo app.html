@@ -5,13 +5,15 @@
 	<title>todo app s2</title>
 	<style>
 		#id-todo-main {
-            font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font: 16px 'Helvetica Neue', Helvetica, Arial, sans-serif;
 			max-width: 600px;
             min-width: 230px;
 			border: 1px #d9d9d9 solid;
 			margin: 0 auto;
             position: relative;
             font-weight: 300;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+                        0 25px 50px 0 rgba(0, 0, 0, 0.1);
 		}
 		.finish {
 			text-decoration: line-through;
@@ -35,7 +37,7 @@
             font-size: 52px;
             font-weight: 500;
             text-align: center;
-            color: rgba(77, 175, 47, 0.55);
+            color: rgba(132, 197, 112, 0.55);
         }
         .header #id-input {
             font-size: 20px;
@@ -61,7 +63,8 @@
             background-color: white;
             color: black;
             border: 2px solid #4CAF50; /* Green */
-            border-radius: 10%
+            border-radius: 10%;
+            margin-left: 22px;
         }
           #id-todo-list .del{
             background-color: white;
@@ -82,13 +85,15 @@
         #id-btn {
             background-color: white;
             color: black;
-            border: 2px solid #4CAF50; /* Green */
-            border-radius: 10%
-            height:40px;
+            height: 46px;
+            border: 2px solid #4CAF50;
+            border-radius: 10% height:40px;
             width: 70px;
             position: absolute;
-            top: 124px;
-            right: 61px;
+            top: 104px;
+            right: 59px;
+            font-size: 20px;
+            border-radius: 6px;
         }
         #id-btn:hover {
             background-color: #4CAF50;
@@ -99,13 +104,13 @@
             /*width: 600px;*/
             height: 20px;
         }
-        #footer:before {
+        #id-main:before {
             content: '';
             position: absolute;
             right: 0;
             width: 600px;
-            bottom: 130px;
-            left: 94px;
+            bottom: 2px;
+            left: 0px;
             height: 50px;
             overflow: hidden;
             box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
