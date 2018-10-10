@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SPA todo app</title>
+	<script src="hua3.js"></script>
+</head>
+<body>
+	<div id="id-div-control">
+		<input id="id-input" type="text">
+		<button id="id-add-button">click add todo</button>
+	</div>
+	<div id="id-div-wrapper">
+		
+	</div>
+	
+	<script>
+		var createTodo = function(task) {
+			t = {
+				task: task,
+				done: false,
+			}
+			return t 
+		}
+		// 保存todoList 到localStorage 中
+		var saveTodos = function(todoList) {
+			localStorage.todos = JSON.stringify(todoList)
+		}
+		// 保存todo
+		var saveTodo = function(todo) {
+			var todoStr = localStorage.todos
+			if (todoStr == undefined) {
+				todoStr = '[]'
+			} 
+			var todoList = JSON.parse(todoStr)
+			todoList.push(todo)
+			saveTodos(todoList)				
+		}
+	</script>
+	<script>
+	// 创建todo 
+		var button = e('#id-add-button')
+		bindEvent(button, 'click', function(event) {
+			var input = e('#id-input')
+			var task = input.value
+			log("task", task)
+			var todo = createTodo(task)
+			saveTodo(todo)
+		})
+	</script>
+</body>
+</html>
