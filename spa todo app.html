@@ -58,7 +58,7 @@
 		}
 	</script>
 	<script>
-	// 创建todo 的事件
+		// 创建todo 的事件
 		var bindEvents = function() {
 			var button = e('#id-add-button')
 			bindEvent(button, 'click', function(event) {
@@ -78,11 +78,20 @@
 				var page = btn.dataset.page
 				// log('page', typeof(page))
 				showPage(page)
+				pushState(page)
 				// if (page == 'todo-new') {
 				// 	pageShowNew()
 				// } else if (page = 'todo-wrapper') {
 				// 	pageShowWrapper()
 				// }
+			})
+
+			// 点击前进后退切换页面
+			window.addEventListener('popstate', function(event){
+				var state = event.state
+				var className = state.page
+				log('popstate', state, className)
+				showPage(className)
 			})
 		}
 	</script>
@@ -113,6 +122,18 @@
 	</script>
 	<script>
 		// var bindAll = function(selector, eventName, callback) {
+		var pushState = function(className) {
+			// 在showPage 的同时切换地址信息
+			// 创建历史记录
+			// className is todo-new todo-wrapper 
+			var pageName = className.split('-')[1]
+			var url = 'spa%20todo%20app.html?page=' + pageName
+			var state = {
+				page: className,
+			}
+			history.pushState(state, 'title', url)
+			document.title = pageName
+		}
 		var showPage = function(className) {
 			var pages = es('.div-page')
 			for (var i = 0; i < pages.length; i++) {
@@ -128,9 +149,10 @@
 			}
 			// 在showPage 的同时切换地址信息
 			// className is todo-new todo-wrapper 
-			var page = className.split('-')[1]
-			var url = 'spa%20todo%20app.html?page=' + page
-			history.pushState(null, 'title', url)
+			// var pageName = className.split('-')[1]
+			// var url = 'spa%20todo%20app.html?page=' + pageName
+			// history.pushState(null, 'title', url)
+			// document.title = pageName
 		}
 
 		// var pageShowWrapper = function() {
@@ -159,6 +181,7 @@
 			}
 			var pageName = 'todo-' + page
 			showPage(pageName)
+			// pushState(pageName)
 		}
 		var __main = function() {
 			bindEvents()
