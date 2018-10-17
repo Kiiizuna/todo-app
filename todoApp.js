@@ -1,9 +1,7 @@
 
-
-
 // var bindAll = function(selector, eventName, callback) {
 var pushState = function(className) {
-	// 在showPage 的同时切换地址信息
+	// 在showPage 的同时切换改变地址信息
 	// 创建历史记录
 	// className is todo-new todo-wrapper 
 	var pageName = className.split('-')[1]
@@ -22,11 +20,16 @@ var showPage = function(className) {
 		page.classList.add('hidden')
 	}
 	var selector = '.' + className
-	var todoNewDiv = e(selector)
-	todoNewDiv.classList.remove('hidden')
+	var todoSelectedDiv = e(selector)
+	todoSelectedDiv.classList.remove('hidden')
 	// 如果是wrapper 页面需要加载每个list
 	if (className == 'todo-wrapper') {
 		showTodoList()
+	} else if (className == 'todo-edit') {
+		log('show edit page div')
+	} else {
+		log('show detail page div')
+		showTodoListDetail()
 	}
 	// 在showPage 的同时切换地址信息
 	// className is todo-new todo-wrapper 
@@ -46,14 +49,13 @@ var showPage = function(className) {
 // 	}
 // }
 
-
 var initApp = function() {
 	// 根据地址栏参数来显示不同的页面
 	var query = location.search
 	var [k, v] = query.slice(1).split('=')
 	// 初始化为wrapper
 	var page = 'wrapper'
-	var validPages = ['new', 'wrapper']
+	var validPages = ['new', 'wrapper', 'edit', 'detail']
 	if (k == 'page') {
 		if (validPages.includes(v)) {
 			page = v
