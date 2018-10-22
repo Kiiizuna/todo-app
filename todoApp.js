@@ -27,6 +27,7 @@ var showPage = function(className) {
 		showTodoList()
 	} else if (className == 'todo-edit') {
 		log('show edit page div')
+		showTodoListEdit()
 	} else {
 		log('show detail page div')
 		showTodoListDetail()
