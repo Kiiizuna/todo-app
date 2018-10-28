@@ -1,5 +1,6 @@
 // 创建todo 的事件
 var bindEvents = function() {
+	// 点击添加事件
 	var button = e('#id-add-button')
 	bindEvent(button, 'click', function(event) {
 		var input = e('#id-input')
@@ -7,10 +8,23 @@ var bindEvents = function() {
 		log("task", task)
 		var todo = createTodo(task)
 		saveTodo(todo)
-		// 点击 add
-		// showTodoList()
 	})
-
+	// 点击修改事件	
+	var todoContainer = e('.todo-edit')
+	todoContainer.addEventListener('keydown',function(event) {
+		log('keydown', event)
+		var target = event.target
+		if (event.key === 'Enter') {
+			target.blur()
+			// event.preventDefault()
+			saveEditTodos()
+		}
+	})
+	// 点击其他地方失去焦点依旧保存修改的内容
+	todoContainer.addEventListener('focusout', function(event) {
+		log('focusout')
+		saveEditTodos()
+	})
 	// 切换页面的按钮
 	bindAll('.hua-tab', 'click', function(event){
 		var btn = event.target

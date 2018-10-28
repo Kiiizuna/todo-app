@@ -106,10 +106,11 @@
         }
         #id-main:before {
             content: '';
+            z-index: -1;
             position: absolute;
             right: 0;
             width: 600px;
-            bottom: 2px;
+            bottom: -6px;
             left: 0px;
             height: 50px;
             overflow: hidden;
@@ -182,7 +183,7 @@
                 }
         })
 
-		//在页面中添加内容(需要再理解下这个函数)
+		//在页面中添加内容
         var addTodo = function(inputValue, done) {
             var main = document.querySelector('#id-main')
             var t = templateTodo(inputValue, done)
