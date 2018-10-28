@@ -39,6 +39,7 @@ var saveEditTodos = function() {
 	for (var i = 0; i < contents.length; i++) {
 		var c = contents[i]
 		var done = c.parentElement.classList.contains('done')
+		// 变量 done 的值为 true 或者 false
 		var todo = {
 			'done': done,
 			'task': c.innerHTML,

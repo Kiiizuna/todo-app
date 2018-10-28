@@ -52,7 +52,9 @@ var insertTodosEdit = function(todoList) {
 	todoEdit.innerHTML = '' 	
 	for (var i = 0; i < todoList.length; i++) {
 		var todo = todoList[i]
-		var t = templateTodoEdit(todo, false)
+		// done 是后修改的状态判断对象
+		var done = todo.done
+		var t = templateTodoEdit(todo, done)
 		appendHTML(todoEdit, t)
 	}
 }
@@ -75,11 +77,13 @@ var changeAndSaveAllTodos = function() {
 		log('todo-content click', event, event.target)
 		if (target.classList.contains('todo-done')) {
 			log('完成')
-			toggleClass('todo-done', target.parentElement)
+			var todoDiv = target.parentElement
+			toggleClass('done', todoDiv)
 			saveEditTodos()
 		} else if (target.classList.contains('todo-delete')) {
 			log('删除')
-			target.parentElement.remove()
+			var todoDiv = target.parentElement
+			todoDiv.remove()
 			saveEditTodos()
 		}
 	})

@@ -1,3 +1,7 @@
 .hidden	{
 	display: none;
 }
+
+.done {
+	background-color: #ddd;
+}
