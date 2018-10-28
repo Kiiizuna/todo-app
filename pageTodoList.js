@@ -10,10 +10,14 @@ var templateTodo = function(todo) {
 }
 
 // 显示修改todo 页面
-var templateTodoEdit = function(todo) {
+var templateTodoEdit = function(todo, done) {
+	var status = ''
+	if (done) {
+		status = 'done'
+	}
 	var task = todo.task
 	var t = `
-		<div class='todo-cell'>
+		<div class='todo-cell ${status}'>
             <button class='todo-done'>完成</button>
             <button class='todo-delete'>删除</button>
             <span class='todo-content' contenteditable='true'>${task}</span>
@@ -26,8 +30,8 @@ var templateTodoDetail = function(todo) {
 	var task = todo.task
 	var t = `
 		<div>
-		<button>点击显示详情</button>
-		<span>${task}</span>	
+			<button>点击显示详情</button>
+			<span>${task}</span>	
 		</div>	
 	`
 	return t 
@@ -48,7 +52,7 @@ var insertTodosEdit = function(todoList) {
 	todoEdit.innerHTML = '' 	
 	for (var i = 0; i < todoList.length; i++) {
 		var todo = todoList[i]
-		var t = templateTodoEdit(todo)
+		var t = templateTodoEdit(todo, false)
 		appendHTML(todoEdit, t)
 	}
 }
@@ -61,6 +65,24 @@ var insertTodosDetail = function(todoList) {
 		var t = templateTodoDetail(todo)
 		appendHTML(todoDetail, t)
 	}
+}
+
+var changeAndSaveAllTodos = function() {
+	// 给 todo-edit 加上事件委托
+	var todoContainer = e('.todo-edit')
+	todoContainer.addEventListener('click', function(event){
+		var target = event.target
+		log('todo-content click', event, event.target)
+		if (target.classList.contains('todo-done')) {
+			log('完成')
+			toggleClass('todo-done', target.parentElement)
+			saveEditTodos()
+		} else if (target.classList.contains('todo-delete')) {
+			log('删除')
+			target.parentElement.remove()
+			saveEditTodos()
+		}
+	})
 }
 
 // 加载最简单的 todo 文本在页面上
@@ -79,3 +101,5 @@ var showTodoListDetail = function() {
 	var todoList = loadTodos()
 	insertTodosDetail(todoList)
 }
+
+changeAndSaveAllTodos()

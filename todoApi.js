@@ -30,3 +30,20 @@ var loadTodos = function() {
 	var todoList = JSON.parse(todoStr)
 	return todoList
 }
+
+
+var saveEditTodos = function() {
+	var editContainer = e('.todo-edit')
+	var contents = editContainer.querySelectorAll('.todo-content')
+	var todos = []
+	for (var i = 0; i < contents.length; i++) {
+		var c = contents[i]
+		var done = c.parentElement.classList.contains('done')
+		var todo = {
+			'done': done,
+			'task': c.innerHTML,
+		}
+		todos.push(todo)
+	}
+	saveTodos(todos)
+}
