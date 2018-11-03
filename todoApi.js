@@ -10,7 +10,7 @@ var createTodo = function(task) {
 var saveTodos = function(todoList) {
 	localStorage.todos = JSON.stringify(todoList)
 }
-// 保存todo
+// 保存增加的单个 todo
 var saveTodo = function(todo) {
 	// var todoStr = localStorage.todos
 	// if (todoStr == undefined) {

@@ -4,4 +4,6 @@
 
 .done {
 	background-color: #ddd;
+	text-decoration: line-through;
+	transition: 0.35s;
 }
