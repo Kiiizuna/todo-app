@@ -32,6 +32,7 @@ var bindEvents = function() {
 		var page = btn.dataset.page
 		// log('page', typeof(page))
 		showPage(page)
+		// 改变 history.state 以及 url 
 		pushState(page)
 		// if (page == 'todo-new') {
 		// 	pageShowNew()
@@ -40,7 +41,7 @@ var bindEvents = function() {
 		// }
 	})
 
-	// 点击前进后退切换页面
+	// 点击前进后退切换显示页面
 	window.addEventListener('popstate', function(event){
 		var state = event.state
 		var className = state.page
